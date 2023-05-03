@@ -1,29 +1,31 @@
-# POC filial-go (caminho feliz)
-
-**pré-requisito**: Docker
-
+# **POC-CLEAN-GO**
+### **Pré-requisito**: Docker
+Executar o comando abaixo para subir a Infra necessária para a aplicação funcionar
+```
+docker-compose -f "docker-compose-infra.yaml" up -d
+```
+## **Execução local**
 ## Passo 1
-Executar o comando abaixo para levantar a Infra necessária para a aplicação funcionar
-```
-docker-compose up -d
-```
-## Passo 2
-Conectar ao Kafka e criar o tópico conforme indicado no .env
-
-## Passo 3
-Conectar ao MongoDB e criar a base de dados e a coleção conforme indicado no .env
-
-## Passo 4
 executar o comando abaixo para baixar os pacotes requeridos pelo projeto
 ```
 go mod tidy
 ```
-## Passo 5
+## Passo 2
 executar o comando abaixo para subir a aplicação
 ```
-go run main.go
+go run .\app\infrastructure\main.go
 ```
-## Mensagem de exemplo do kafka
+## **Execução Docker**
+Executar o comando abaixo para fazer o build da aplicação em container
 ```
-{"name":"nome","code": 33333,"type":"tipo"}
+docker-compose up -d --build
 ```
+## **Mensagem de exemplo do kafka**
+```
+{"name":"nome","code":1111,"type":"tipo"}
+```
+## **Container health check**
+- http://localhost:8086/live
+- http://localhost:8086/ready
+
+**Ps:** para ter uma visualização mais detalhara basta colocar. ```?full=1```
