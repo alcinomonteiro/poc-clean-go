@@ -1,8 +1,6 @@
 package filialcontroller
 
 import (
-	"fmt"
-
 	"filial-go/app/core/dto"
 )
 
@@ -13,11 +11,9 @@ func (controller controller) Create(filialMessage []byte) error {
 		return err
 	}
 
-	filial, err := controller.usecase.Create(createFilialCommand)
-	if err != nil {
+	if err = controller.usecase.Create(createFilialCommand); err != nil {
 		return err
 	}
 
-	fmt.Println(filial)
 	return nil
 }
