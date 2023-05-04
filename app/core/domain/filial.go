@@ -25,10 +25,10 @@ type FilialController interface {
 
 // FilialUseCase is a Filial of business rule layer
 type FilialUseCase interface {
-	Create(filialCommand *dto.CreateFilialCommand) (*Filial, error)
+	Create(filialCommand *dto.CreateFilialCommand) error
 }
 
 // FilialRepository is a Filial of database connection adapter layer
 type FilialRepository interface {
-	Create(filialInput *dto.CreateFilialInput) (*Filial, error)
+	Create(filialInput *dto.CreateFilialInput) error
 }

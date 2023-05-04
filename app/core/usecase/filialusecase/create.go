@@ -1,11 +1,10 @@
 package filialusecase
 
 import (
-	"filial-go/app/core/domain"
 	"filial-go/app/core/dto"
 )
 
-func (usecase usecase) Create(filialCommand *dto.CreateFilialCommand) (*domain.Filial, error) {
+func (usecase usecase) Create(filialCommand *dto.CreateFilialCommand) error {
 
 	filialInput := dto.CreateFilialInput{
 		Name: filialCommand.Name,
@@ -13,11 +12,11 @@ func (usecase usecase) Create(filialCommand *dto.CreateFilialCommand) (*domain.F
 		Type: filialCommand.Type,
 	}
 
-	filial, err := usecase.repository.Create(&filialInput)
+	err := usecase.repository.Create(&filialInput)
 
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	return filial, nil
+	return nil
 }

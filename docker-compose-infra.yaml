@@ -17,9 +17,11 @@ services:
     image: mongo:4.4.9
     volumes:
       - ./data/db:/data/db
+      - ./scripts:/scripts
     ports:
       - "27017:27017"
     restart: always
+    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "dbrs" ]
 
   kafka:
     container_name: kafka
