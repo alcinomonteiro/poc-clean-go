@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	"filial-go/app/infrastructure/adapters/messaging"
+	"filial-go/app/infrastructure/adapters/messaging/filialmessage"
 	"filial-go/app/infrastructure/config"
 )
 
@@ -23,5 +23,5 @@ func main() {
 	// Health
 	go http.ListenAndServe(":8086", config.Health(conn, filialReader))
 	// start listener
-	messaging.Consume(ctx, filialReader, filialController)
+	filialmessage.Consume(ctx, filialReader, filialController)
 }
