@@ -17,7 +17,7 @@ func main() {
 	// mongo filial collection
 	filialCollection := config.GetFilialCollection(conn)
 	// di filial
-	filialController := config.ConfigFilialDI(filialCollection)
+	filialController := config.ConfigFilialDI(ctx, filialCollection)
 	// kafka client filial
 	filialReader := config.ConnectKafka()
 	// Health

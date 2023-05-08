@@ -1,28 +1,27 @@
 package filialrepository
 
 import (
-	"context"
-	"fmt"
+	"log"
 
 	"filial-go/app/core/dto"
 
+	"github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/writeconcern"
 )
 
 func (repository repository) Create(filialInput *dto.CreateFilialInput) error {
+	session, err := repository.collection.Database().Client().StartSession()
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer session.EndSession(repository.ctx)
 
 	wc := writeconcern.New(writeconcern.WMajority())
 	txnOptions := options.Transaction().SetWriteConcern(wc)
 
-	session, err := repository.collection.Database().Client().StartSession()
-	if err != nil {
-		panic(err)
-	}
-	defer session.EndSession(context.Background())
-
-	err = mongo.WithSession(context.Background(), session, func(ctx mongo.SessionContext) error {
+	err = mongo.WithSession(repository.ctx, session, func(ctx mongo.SessionContext) error {
 		if err = session.StartTransaction(txnOptions); err != nil {
 			return err
 		}
@@ -33,15 +32,15 @@ func (repository repository) Create(filialInput *dto.CreateFilialInput) error {
 		if err = session.CommitTransaction(ctx); err != nil {
 			return err
 		}
-		fmt.Println(result.InsertedID)
+		logrus.Info("Inserted: ", result.InsertedID)
 		return nil
 	})
 
 	if err != nil {
-		if err := session.AbortTransaction(context.TODO()); err != nil {
-			panic(err)
+		if err := session.AbortTransaction(repository.ctx); err != nil {
+			log.Fatal(err)
 		}
-		panic(err)
+		log.Fatal(err)
 	}
 
 	return nil
